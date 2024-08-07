@@ -2071,11 +2071,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\WORK\\Mini project\\my-mini-project\\my-mini-project.csproj",
+      "projectUniqueName": "D:\\WORK\\Mini project\\mini-project\\my-mini-project\\my-mini-project.csproj",
       "projectName": "my-mini-project",
-      "projectPath": "D:\\WORK\\Mini project\\my-mini-project\\my-mini-project.csproj",
+      "projectPath": "D:\\WORK\\Mini project\\mini-project\\my-mini-project\\my-mini-project.csproj",
       "packagesPath": "C:\\Users\\Lenovo-User\\.nuget\\packages\\",
-      "outputPath": "D:\\WORK\\Mini project\\my-mini-project\\obj\\",
+      "outputPath": "D:\\WORK\\Mini project\\mini-project\\my-mini-project\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

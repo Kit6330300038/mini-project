@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7o/uLEOD7Gu39Rbh/4q/ql/KqS+MfqHRcXeCqT4ioooNN5IGzggYPYKE05I3COMjGkPGWtNj6sjobOFLtxqIAg==",
+  "dgSpecHash": "tkTfejKMa2p0HUoDTq0YCkHedefmH1w+1VPR+sdGuFABZOvjy86ekiYz/HednpahO/6eDot7rvIO0xcXsZVK1Q==",
   "success": true,
-  "projectFilePath": "d:\\WORK\\Mini project\\my-mini-project\\my-mini-project.csproj",
+  "projectFilePath": "D:\\WORK\\Mini project\\mini-project\\my-mini-project\\my-mini-project.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Lenovo-User\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\Lenovo-User\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",

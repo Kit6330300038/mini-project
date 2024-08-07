@@ -27,10 +27,18 @@ namespace my_mini_project.Controllers
         [HttpPost("[action]")]
         public async Task<UserViewModel> Register(UserSignUp data)
         {
-            
             return await _userServices.NewUser(data);
         }
-
-
+        [HttpGet("[action]")]
+        public async Task<int> getUserLot(string username)
+        {
+            
+            return await _userServices.getUserLot(username);
+        }
+        [HttpGet("[action]")]
+        public async Task<int> moneyGain(string username)
+        {
+            return await _userServices.getCommisionMoney(username);
+        }
     }
 }

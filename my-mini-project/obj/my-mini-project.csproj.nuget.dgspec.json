@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\WORK\\Mini project\\my-mini-project\\my-mini-project.csproj": {}
+    "D:\\WORK\\Mini project\\mini-project\\my-mini-project\\my-mini-project.csproj": {}
   },
   "projects": {
-    "d:\\WORK\\Mini project\\my-mini-project\\my-mini-project.csproj": {
+    "D:\\WORK\\Mini project\\mini-project\\my-mini-project\\my-mini-project.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\WORK\\Mini project\\my-mini-project\\my-mini-project.csproj",
+        "projectUniqueName": "D:\\WORK\\Mini project\\mini-project\\my-mini-project\\my-mini-project.csproj",
         "projectName": "my-mini-project",
-        "projectPath": "d:\\WORK\\Mini project\\my-mini-project\\my-mini-project.csproj",
+        "projectPath": "D:\\WORK\\Mini project\\mini-project\\my-mini-project\\my-mini-project.csproj",
         "packagesPath": "C:\\Users\\Lenovo-User\\.nuget\\packages\\",
-        "outputPath": "d:\\WORK\\Mini project\\my-mini-project\\obj\\",
+        "outputPath": "D:\\WORK\\Mini project\\mini-project\\my-mini-project\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
