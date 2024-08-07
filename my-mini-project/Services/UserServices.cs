@@ -28,9 +28,10 @@ namespace my_mini_project.Services
 
         public async Task<UserViewModel> NewUser(UserSignUp data)
         {
-            try{
-
-                var user = new UserViewModel(){
+            try
+            {
+                var user = new UserViewModel()
+                {
                     username = data.username,
                     password = data.password,
                     firstname = data.firstname,
@@ -39,11 +40,39 @@ namespace my_mini_project.Services
                     usecode = data.code
                 };
                 await _User.InsertOneAsync(user);
+                if (!String.IsNullOrEmpty(user.usecode))
+                { }
                 return user;
-            }catch{
+            }
+            catch
+            {
                 return new UserViewModel();
             }
-            
+
+        }
+        public async Task<int> getUserLot(string username)
+        {
+            var filter = Builders<UserViewModel>.Filter.Eq(b => b.username, username);
+            var data = await _User.Find(filter).FirstOrDefaultAsync();
+            return Lot(data);
+        }
+        public async Task<int> getCommisionMoney(string username)
+        {
+            var filter = Builders<UserViewModel>.Filter.Eq(b => b.username, username);
+            var data = await _User.Find(filter).FirstOrDefaultAsync();
+            return data.gain;
+        }
+        public int Lot(UserViewModel model)
+        {
+            return max(2, min(30, model.firstname.Length + model.lastname.Length + model.username.Length));
+        }
+        public int max(int num1, int num2)
+        {
+            return (num1 > num2 ? num1 : num2);
+        }
+        public int min(int num1, int num2)
+        {
+            return (num1 < num2 ? num1 : num2);
         }
     }
 }
