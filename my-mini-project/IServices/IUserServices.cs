@@ -10,7 +10,8 @@ namespace my_mini_project.IServices
     {
         Task<IEnumerable<UserViewModel>> GetUser();
         Task<UserViewModel> NewUser(UserSignUp data);
-        Task<int> getUserLot(string username);
-        Task<int> getCommisionMoney(string username);
+        Task<string> getCode(string? username);
+        Task<int> getUserLot(string? username);
+        Task<int> getCommisionMoney(string? username);
     }
 }

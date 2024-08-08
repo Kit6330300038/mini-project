@@ -7,38 +7,57 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
+using my_mini_project.IServices;
 using my_mini_project.ViewModel;
 
 namespace my_mini_project.Services
 {
-    public class AccountService
+    public class AccountService : IAccountServices
     {
         private readonly JwtSettings _jwtSettings;
-
-        public AccountService(IOptions<JwtSettings> jwtSettings)
+        private readonly IMongoDatabase _db;
+        private readonly IMongoCollection<UserViewModel> _User;
+        public AccountService(JwtSettings jwtSettings, IMongoDatabase db)
         {
-            _jwtSettings = jwtSettings.Value;
+            _db = db;
+            _User = _db.GetCollection<UserViewModel>("users");
+            _jwtSettings = jwtSettings;
         }
 
-        public string GenerateToken(string userId)
+        public async Task<string> GenerateToken(string username)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, userId),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, "user")
+            };
 
             var token = new JwtSecurityToken(
                 _jwtSettings.Issuer,
                 _jwtSettings.Audience,
                 claims,
-                expires: DateTime.Now.AddMinutes(_jwtSettings.ExpiryInMinutes),
-                signingCredentials: credentials);
+                expires: DateTime.Now.AddHours(_jwtSettings.ExpiryInMinutes),
+                signingCredentials: credentials
+                );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<string> Login(string username, string password)
+        {
+            var filter = Builders<UserViewModel>.Filter.Eq(b => b.username, username);
+            var user = await _User.Find(filter).FirstOrDefaultAsync();
+            if(user == null || user.password != password)
+            {
+                return "";
+            }
+            return await GenerateToken(username);
         }
     }
 

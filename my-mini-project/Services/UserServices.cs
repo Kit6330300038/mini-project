@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -39,29 +41,58 @@ namespace my_mini_project.Services
                     email = data.email,
                     usecode = data.code
                 };
-                await _User.InsertOneAsync(user);
                 if (!String.IsNullOrEmpty(user.usecode))
-                { }
+                {
+                    user.descending = await AddCommisionMoney(user);
+                }
+                await _User.InsertOneAsync(user);
+
                 return user;
             }
-            catch
+            catch(Exception ex)
             {
                 return new UserViewModel();
             }
 
         }
+
+
+
+
+
+        public async Task<string> getCode(string username)
+        {
+            var filter = Builders<UserViewModel>.Filter.Eq(b => b.username, username);
+            var data = await _User.Find(filter).FirstOrDefaultAsync();
+            if (string.IsNullOrEmpty(data.selfcode) && data.descending < 3)
+            {
+                string code;
+                do
+                {
+                    code = await GenerateCode();
+                } while (await IsCodeInDatabaseAsync(code));
+
+                var update = Builders<UserViewModel>.Update.Set(b => b.selfcode, code);
+                await _User.UpdateOneAsync(filter, update);
+                return code;
+            }
+            return data.selfcode;
+        }
+
         public async Task<int> getUserLot(string username)
         {
             var filter = Builders<UserViewModel>.Filter.Eq(b => b.username, username);
             var data = await _User.Find(filter).FirstOrDefaultAsync();
             return Lot(data);
         }
+
         public async Task<int> getCommisionMoney(string username)
         {
             var filter = Builders<UserViewModel>.Filter.Eq(b => b.username, username);
             var data = await _User.Find(filter).FirstOrDefaultAsync();
             return data.gain;
         }
+
         public int Lot(UserViewModel model)
         {
             return max(2, min(30, model.firstname.Length + model.lastname.Length + model.username.Length));
@@ -73,6 +104,30 @@ namespace my_mini_project.Services
         public int min(int num1, int num2)
         {
             return (num1 < num2 ? num1 : num2);
+        }
+
+        public static async Task<string> GenerateCode()
+        {
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                var key = new byte[32];
+                rng.GetBytes(key);
+                return Convert.ToBase64String(key);
+            }
+        }
+        private async Task<bool> IsCodeInDatabaseAsync(string code)
+        {
+            var filter = Builders<UserViewModel>.Filter.Eq(d => d.selfcode, code);
+            var count = await _User.CountDocumentsAsync(filter);
+            return count > 0;
+        }
+        private async Task<int> AddCommisionMoney(UserViewModel user)
+        {
+            var filter = Builders<UserViewModel>.Filter.Eq(b => b.selfcode, user.usecode);
+            var data = await _User.Find(filter).FirstOrDefaultAsync();
+            var update = Builders<UserViewModel>.Update.Set(b => b.gain, (data.gain + Lot(user)));
+            await _User.UpdateOneAsync(filter, update);
+            return data.descending+1;
         }
     }
 }
