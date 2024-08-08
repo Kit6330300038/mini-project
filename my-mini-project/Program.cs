@@ -20,9 +20,11 @@ builder.Services.AddScoped(s =>
     var database = builder.Configuration.GetValue<string>("MongoDbSettings:DatabaseName");
     return client.GetDatabase(database);
 });
+var jwtSettings = new JwtSettings();
 
 
-
+builder.Configuration.Bind(nameof(jwtSettings),jwtSettings);
+builder.Services.AddSingleton(jwtSettings);
 // Register your database and collections
 
 // Register other services
@@ -55,7 +57,12 @@ builder.Services.AddSwaggerGen(a =>
 {
     a.AddSecurityDefinition("Berrer", new OpenApiSecurityScheme
     {
-        Description = "Jwt Authorization"
+        Description = "Jwt Authorization",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT"
     });
     a.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -78,6 +85,7 @@ builder.Services.AddSwaggerGen(a =>
 }
 );
 builder.Services.AddTransient<IUserServices, UserServices>();
+builder.Services.AddTransient<IAccountServices, AccountService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
