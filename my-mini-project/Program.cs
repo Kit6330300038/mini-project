@@ -23,7 +23,7 @@ builder.Services.AddScoped(s =>
 var jwtSettings = new JwtSettings();
 
 
-builder.Configuration.Bind(nameof(jwtSettings),jwtSettings);
+builder.Configuration.Bind(nameof(jwtSettings), jwtSettings);
 builder.Services.AddSingleton(jwtSettings);
 // Register your database and collections
 
@@ -34,6 +34,12 @@ builder.Services.AddAuthentication(x =>
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddCookie(options =>
+    {
+        options.LoginPath = "/api/Account/login";
+        options.LogoutPath = "/api/Account/logout";
+        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+        options.SlidingExpiration = true;
 }).AddJwtBearer(x =>
 {
     x.TokenValidationParameters = new TokenValidationParameters

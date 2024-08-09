@@ -23,12 +23,12 @@ namespace my_mini_project.Controllers
             _accountServices = accountServices;
             _userServices = userServices;
         }
-        [HttpGet("[action]")]
-        public async Task<IEnumerable<UserViewModel>> getAllUser()
-        {
+        // [HttpGet("[action]")]
+        // public async Task<IEnumerable<UserViewModel>> getAllUser()
+        // {
 
-            return await _userServices.GetUser();
-        }
+        //     return await _userServices.GetUser();
+        // }
         [HttpPost("[action]")]
         public async Task<UserViewModel> Register(UserSignUp data)
         {

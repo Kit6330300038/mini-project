@@ -18,6 +18,8 @@ namespace my_mini_project.Services
         private readonly IMongoDatabase _db;
         private readonly IMongoCollection<UserViewModel> _User;
 
+        private readonly List<int> gainperLot = new List<int>{5,3,2,1,0};
+
         public UserServices(IMongoDatabase db)
         {
             _db = db;
@@ -57,9 +59,6 @@ namespace my_mini_project.Services
         }
 
 
-
-
-
         public async Task<string> getCode(string username)
         {
             var filter = Builders<UserViewModel>.Filter.Eq(b => b.username, username);
@@ -75,6 +74,9 @@ namespace my_mini_project.Services
                 var update = Builders<UserViewModel>.Update.Set(b => b.selfcode, code);
                 await _User.UpdateOneAsync(filter, update);
                 return code;
+            }if(data.descending == 3)
+            {
+                return "";
             }
             return data.selfcode;
         }
@@ -88,9 +90,10 @@ namespace my_mini_project.Services
 
         public async Task<int> getCommisionMoney(string username)
         {
+        
             var filter = Builders<UserViewModel>.Filter.Eq(b => b.username, username);
             var data = await _User.Find(filter).FirstOrDefaultAsync();
-            return data.gain;
+            return data.gain * gainperLot[data.descending+1];
         }
 
         public int Lot(UserViewModel model)
@@ -99,11 +102,11 @@ namespace my_mini_project.Services
         }
         public int max(int num1, int num2)
         {
-            return (num1 > num2 ? num1 : num2);
+            return num1 > num2 ? num1 : num2;
         }
         public int min(int num1, int num2)
         {
-            return (num1 < num2 ? num1 : num2);
+            return num1 < num2 ? num1 : num2;
         }
 
         public static async Task<string> GenerateCode()

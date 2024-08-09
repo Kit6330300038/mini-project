@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
@@ -49,15 +50,30 @@ namespace my_mini_project.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<string> Login(string username, string password)
+        public async Task<Claim[]> getCaim(string username)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, "user")
+            };
+            return claims;
+        }
+
+        public async Task<bool> Login(string username, string password)
         {
             var filter = Builders<UserViewModel>.Filter.Eq(b => b.username, username);
             var user = await _User.Find(filter).FirstOrDefaultAsync();
-            if(user == null || user.password != password)
+            if (user == null || user.password != password)
             {
-                return "";
+                return false;
             }
-            return await GenerateToken(username);
+            return true;
         }
     }
 
