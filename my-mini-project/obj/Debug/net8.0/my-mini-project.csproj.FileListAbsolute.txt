@@ -111,3 +111,4 @@ d:\WORK\Mini project\mini-project\my-mini-project\obj\Debug\net8.0\refint\my-min
 d:\WORK\Mini project\mini-project\my-mini-project\obj\Debug\net8.0\my-mini-project.pdb
 d:\WORK\Mini project\mini-project\my-mini-project\obj\Debug\net8.0\my-mini-project.genruntimeconfig.cache
 d:\WORK\Mini project\mini-project\my-mini-project\obj\Debug\net8.0\ref\my-mini-project.dll
+d:\WORK\Mini project\mini-project\my-mini-project\bin\Debug\net8.0\System.Security.Permissions.dll

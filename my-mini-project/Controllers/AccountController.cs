@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -22,12 +24,36 @@ namespace my_mini_project.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<string> Login(string username,string password)
+        public async Task<string> getLoginToken(string username, string password)
         {
-
-            return await _AccountServices.Login(username,password);
+            if (await _AccountServices.Login(username, password))
+            {
+                return await _AccountServices.GenerateToken(username);
+            }
+            return "";
         }
 
+
+        // [HttpPost("login")]
+        // public async Task<IActionResult> Login(string username, string password)
+        // {
+        //     if (await _AccountServices.Login(username, password))
+        //     {
+        //         var claims = await _AccountServices.getCaim(username);
+        //         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        //         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+        //         return Ok(new { Message = "Login successful" });
+        //     }
+
+        //     return Unauthorized();
+        // }
+
+        // [HttpPost("logout")]
+        // public async Task<IActionResult> Logout()
+        // {
+        //     await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        //     return Ok(new { Message = "Logout successful" });
+        // }
 
     }
 }
